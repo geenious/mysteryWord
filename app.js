@@ -40,9 +40,12 @@ app.get('/', function(req, res) {
   const blankWord = word.replace(/\w/g,'_');
   console.log(blankWord);
 
+  let guesses;
+
   res.render('index', {
     word: word,
-    blankWord: blankWord
+    blankWord: blankWord,
+    guesses: guesses
   });
 });
 
