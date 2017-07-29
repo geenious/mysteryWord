@@ -24,29 +24,33 @@ app.use(session({
   resave: false
 }));
 
-function getRandomWord() {
-  // console.log(words.length)
-  let word = words[Math.floor(Math.random() * words.length)];
-  // console.log(word);
-}
-// getRandomWord();
-
-app.get('/', function(req, res) {
-
+function wordMysteryRender(req, res) {
   const word = words[Math.floor(Math.random() * words.length)];
   console.log(word);
+
   req.session.word = word;
 
-  const blankWord = word.replace(/\w/g,'_');
+  const blankWord = req.session.word.replace(/\w/g,'_');
   console.log(blankWord);
 
-  let guesses;
+  let guesses = [];
 
   res.render('index', {
+    // may need to use req.session.word as word value
     word: word,
     blankWord: blankWord,
     guesses: guesses
   });
+}
+
+app.get('/', function(req, res) {
+  wordMysteryRender(req, res);
+});
+
+app.post('/', function(req, res) {
+  // post guesses to page
+  console.log(req.body.letter);
+  wordMysteryRender(req, res);
 });
 
 
