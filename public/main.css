@@ -8,6 +8,8 @@ h1 {
   text-align: center;
   margin: 0;
   line-height: 3em;
+  font-family: 'Bellefair', serif;
+  letter-spacing: 2px;
 }
 
 h2 {
@@ -31,6 +33,7 @@ fieldset {
 legend {
   margin: 0 auto;
   padding: 0 5px;
+  font-family: 'Bellefair', serif;
 }
 
 h4 {
