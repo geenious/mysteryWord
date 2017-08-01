@@ -8,9 +8,11 @@ const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().sp
 
 const app = express();
 
+// mustache HACK
 let mustacheInstance = mustacheExpress();
 mustacheInstance.cache = null;
 app.engine('mustache', mustacheInstance);
+
 // app.engine('mustache', mustacheExpress);
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
@@ -26,20 +28,21 @@ app.use(session({
 
 function wordMysteryRender(req, res) {
   const word = words[Math.floor(Math.random() * words.length)];
-  console.log(word);
 
-  req.session.word = word;
+  if (!req.session.word) {
+    req.session.word = word;
+  }
 
   const blankWord = req.session.word.replace(/\w/g,'_');
-  console.log(blankWord);
 
   let guesses = [];
+  let attempts;
 
   res.render('index', {
-    // may need to use req.session.word as word value
-    word: word,
+    word: req.session.word,
     blankWord: blankWord,
-    guesses: guesses
+    guesses: req.session.guesses,
+    attempts: req.session.attempts
   });
 }
 
@@ -48,8 +51,18 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  // post guesses to page
-  console.log(req.body.letter);
+  if (!req.session.guesses) {
+    req.session.guesses = [];
+  }
+  req.session.guesses.push(req.body.letter.toUpperCase());
+
+  if (!req.session.attempts) {
+    req.session.attempts = 8;
+  }
+  req.session.attempts -= 1;
+
+  
+
   wordMysteryRender(req, res);
 });
 

@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <title>Mystery Word</title>
     <link rel="stylesheet" href="/main.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bellefair"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bellefair">
   </head>
   <body>
     <h1>?? Mystery Word ??</h1>
-    <h2>{{blankWord}}</h2>
-    <h2>{{word}}</h2>
+    <h2 id="blankWord">{{blankWord}}</h2>
+    <h2 id="word">{{word}}</h2>
     <form action="/" method="post">
       <fieldset>
         <legend>Select your letter</legend>
@@ -17,9 +17,15 @@
         <button type="submit" name="button">Submit Guess</button>
       </fieldset>
     </form>
-    {{#guesses}}
-    <h4>Guesses:</h4>
-    <p>{{guesses}}</p>
-    {{/guesses}}
+    <section>
+      <div>
+        <h4>Attempts Left:</h4>
+        <p>{{attempts}}</p>
+      </div>
+      <div>
+        <h4>Guesses:</h4>
+        <p>{{guesses}}</p>
+      </div>
+    </section>
   </body>
 </html>

@@ -36,10 +36,22 @@ legend {
   font-family: 'Bellefair', serif;
 }
 
-h4 {
-  padding-left: 40%;
+section {
+  width: 960px;
+  margin-left: 33%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div {
+  flex-basis: 40%;
 }
 
 p {
-  padding-left: 40%;
+  color: red;
+  letter-spacing: .5em;
 }
+
+/*#word {
+  visibility: hidden;
+}*/
