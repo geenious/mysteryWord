@@ -50,6 +50,7 @@ div {
 p {
   color: red;
   letter-spacing: .5em;
+  font-weight: bold;
 }
 
 /*#word {

@@ -34,13 +34,14 @@ function wordMysteryRender(req, res) {
   }
 
   const blankWord = req.session.word.replace(/\w/g,'_');
+  req.session.blankWord = blankWord;
 
   let guesses = [];
   let attempts;
 
   res.render('index', {
     word: req.session.word,
-    blankWord: blankWord,
+    blankWord: req.session.blankWord,
     guesses: req.session.guesses,
     attempts: req.session.attempts
   });
@@ -61,7 +62,16 @@ app.post('/', function(req, res) {
   }
   req.session.attempts -= 1;
 
-  
+  console.log(req.session);
+
+  //  Make letters appear if guessed correctly
+  req.session.blankWord = req.session.blankWord.split('');
+  for (let i = 0; i < req.session.word.length; i++) {
+    if (req.body.letter === req.session.word[i]) {
+      req.session.blankWord[i] = req.body.letter;
+    }
+  }
+  console.log(req.session.blankWord.join(''));
 
   wordMysteryRender(req, res);
 });
