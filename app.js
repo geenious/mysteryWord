@@ -76,8 +76,6 @@ app.post('/', function(req, res) {
   }
   req.session.blankWord = req.session.blankWord.join('');
 
-  console.log(req.session.blankWord);
-
   wordMysteryRender(req, res);
 });
 
