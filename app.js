@@ -28,13 +28,15 @@ app.use(session({
 
 function wordMysteryRender(req, res) {
   const word = words[Math.floor(Math.random() * words.length)];
+  const blankWord = word.replace(/\w/g,'_');
 
   if (!req.session.word) {
     req.session.word = word;
   }
 
-  const blankWord = req.session.word.replace(/\w/g,'_');
-  req.session.blankWord = blankWord;
+  if (!req.session.blankWord) {
+    req.session.blankWord = blankWord;
+  }
 
   let guesses = [];
   let attempts;
@@ -60,6 +62,7 @@ app.post('/', function(req, res) {
   if (!req.session.attempts) {
     req.session.attempts = 8;
   }
+
   req.session.attempts -= 1;
 
   console.log(req.session);
@@ -71,7 +74,9 @@ app.post('/', function(req, res) {
       req.session.blankWord[i] = req.body.letter;
     }
   }
-  console.log(req.session.blankWord.join(''));
+  req.session.blankWord = req.session.blankWord.join('');
+
+  console.log(req.session.blankWord);
 
   wordMysteryRender(req, res);
 });
