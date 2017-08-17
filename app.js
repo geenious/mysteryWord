@@ -5,12 +5,19 @@ const bodyParser = require('body-parser');
 const fs = require('file-system');
 require('dotenv').config();
 
-const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+let words;
+
+if (process.env.NODE_ENV === 'development') {
+  words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+} else {
+  words = fs.readFileSync(__dirname + '/wordsList.txt', 'utf-8').toLowerCase().split('\n');
+}
+
 
 const app = express();
 
 const mustache = mustacheExpress();
-if (process.env.NODE_ENV ==='development') {
+if (process.env.NODE_ENV === 'development') {
   mustache.cache = null;
 }
 app.engine('mustache', mustache);
