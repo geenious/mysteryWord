@@ -3,6 +3,7 @@ const mustacheExpress = require('mustache-express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('file-system');
+require('dotenv').config();
 
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 
