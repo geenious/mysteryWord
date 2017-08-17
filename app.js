@@ -8,14 +8,12 @@ const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().sp
 
 const app = express();
 
-// mustache HACK
-let mustacheInstance = mustacheExpress();
-mustacheInstance.cache = null;
-app.engine('mustache', mustacheInstance);
-
-// app.engine('mustache', mustacheExpress);
+const mustache = mustacheExpress();
+if (process.env.NODE_ENV ==='development') {
+  mustache.cache = null;
+}
+app.engine('mustache', mustache);
 app.set('view engine', 'mustache');
-app.set('views', __dirname + '/views');
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -53,6 +51,14 @@ app.get('/', function(req, res) {
   wordMysteryRender(req, res);
 });
 
+app.get('/winner', (req, res) => {
+  res.render('winner');
+});
+
+app.get('/loser', (req, res) => {
+  res.render('loser');
+});
+
 app.post('/', function(req, res) {
   if (!req.session.guesses) {
     req.session.guesses = [];
@@ -63,9 +69,9 @@ app.post('/', function(req, res) {
     req.session.attempts = 8;
   }
 
-  req.session.attempts -= 1;
-
-  console.log(req.session);
+  if (req.session.word.indexOf(req.body.letter) < 0) {
+    req.session.attempts -= 1;
+  }
 
   //  Make letters appear if guessed correctly
   req.session.blankWord = req.session.blankWord.split('');
@@ -76,10 +82,22 @@ app.post('/', function(req, res) {
   }
   req.session.blankWord = req.session.blankWord.join('');
 
+  if (req.session.blankWord == req.session.word) {
+    res.redirect('/winner');
+    req.session.destroy();
+    return;
+  }
+
+  if (req.session.attempts == 0) {
+    res.redirect('/loser');
+    req.session.destroy();
+    return;
+  }
+
   wordMysteryRender(req, res);
 });
 
 
-app.listen(3000, function() {
-  console.log('Oh, hello there port 3000');
+app.listen(process.env.PORT, function() {
+  console.log(`Oh, hello there port ${process.env.PORT}`);
 });

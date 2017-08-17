@@ -53,6 +53,11 @@ p {
   font-weight: bold;
 }
 
-/*#word {
-  visibility: hidden;
-}*/
+#playagain {
+  text-align: center;
+}
+
+#playagain a {
+  color: blue;
+  text-decoration: none;
+}
