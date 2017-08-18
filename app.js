@@ -5,14 +5,7 @@ const bodyParser = require('body-parser');
 const fs = require('file-system');
 require('dotenv').config();
 
-let words;
-
-if (process.env.NODE_ENV === 'development') {
-  words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-} else {
-  words = fs.readFileSync(__dirname + '/wordsList.txt', 'utf-8').toLowerCase().split('\n');
-}
-
+let words = fs.readFileSync(__dirname + '/wordsList.txt', 'utf-8').toLowerCase().split('\n');
 
 const app = express();
 
@@ -60,11 +53,13 @@ app.get('/', function(req, res) {
 });
 
 app.get('/winner', (req, res) => {
-  res.render('winner');
+  res.render('winner', { word: req.session.word });
+  req.session.destroy()
 });
 
 app.get('/loser', (req, res) => {
-  res.render('loser');
+  res.render('loser', { word: req.session.word });
+  req.session.destroy();
 });
 
 app.post('/', function(req, res) {
@@ -92,13 +87,11 @@ app.post('/', function(req, res) {
 
   if (req.session.blankWord == req.session.word) {
     res.redirect('/winner');
-    req.session.destroy();
     return;
   }
 
   if (req.session.attempts == 0) {
     res.redirect('/loser');
-    req.session.destroy();
     return;
   }
 
