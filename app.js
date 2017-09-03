@@ -79,8 +79,8 @@ app.post('/', function(req, res) {
   //  Make letters appear if guessed correctly
   req.session.blankWord = req.session.blankWord.split('');
   for (let i = 0; i < req.session.word.length; i++) {
-    if (req.body.letter === req.session.word[i]) {
-      req.session.blankWord[i] = req.body.letter;
+    if (req.body.letter.toLowerCase() === req.session.word[i]) {
+      req.session.blankWord[i] = req.body.letter.toLowerCase();
     }
   }
   req.session.blankWord = req.session.blankWord.join('');
